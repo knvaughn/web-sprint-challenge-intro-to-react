@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import HomeWorld from './HomeWorld';
 
 const StyledCharacter = styled.div`
     background: #2f313e;
@@ -10,7 +11,6 @@ const StyledCharacter = styled.div`
     padding: 20px;
     flex: 1;
     text-align: left;
-    transition: all .2s linear;
 
     h3 {
         text-align: center;
@@ -21,19 +21,34 @@ const StyledCharacter = styled.div`
         line-height: 2;
     }
 
-    &:hover {
-        cursor: pointer;
-        border: 4px solid #d8763a;
-        transition: all .2s linear;
-    }
-
     @media(max-width: 1600px) {
         flex: 1 1 30%;
     }
 `;
 
+const StyledButton = styled.button`
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    background: #51535d;
+    border: 2px solid transparent;
+    margin-top: 10px;
+    border-radius: 50px;
+    padding: 10px 20px;
+    transition: all .2s linear;
+
+    &:hover {
+        cursor: pointer;
+        border: 2px solid #d8763a;
+        transition: all .2s linear;
+    }
+`;
+
 const Character = (props) => {
-    const { character } = props;
+    const { character, homeWorld } = props;
+    const [showHomeWorld, setShowHomeWorld] = useState(false);
+
     return (
         <StyledCharacter>
             <h3>{character.name}</h3>
@@ -44,6 +59,10 @@ const Character = (props) => {
             <p>Eye Color: {character.eye_color}</p>
             <p>Hair Color: {character.hair_color}</p>
             <p>Skin Color: {character.skin_color}</p>
+            <StyledButton onClick={() => setShowHomeWorld(!showHomeWorld)}>{showHomeWorld ? 'Hide' : 'Show More'}</StyledButton>
+            {
+                showHomeWorld && <HomeWorld homeWorld={homeWorld} />
+            }
         </StyledCharacter>
     );
 }
