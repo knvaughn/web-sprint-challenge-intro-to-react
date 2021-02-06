@@ -45,7 +45,24 @@ const App = () => {
   // sync up with, if any.
 const fetchCharacters = () => {
   axios.get('https://swapi.dev/api/people')
-  .then(response => {console.log(response.data); setCharacterList(response.data)})
+  .then(response => {
+    // create list of promises for each character's homeworld
+    const promises = response.data.map(character => {
+      return axios.get(character.homeworld)
+      .then(response => response.data)
+      .catch(error => console.log(error))
+    });
+    // resolve promises and update list
+    Promise.all(promises)
+    .then(worlds => {
+      // set character list with new property home that contains the homeworld data for each character
+      setCharacterList(response.data.map((character, index) => {
+        return {...character, home: worlds[index]}
+      }));
+    })
+    .catch(error => console.log(error));
+  })
+  .catch(error => console.log(error));
 }
 
 useEffect(fetchCharacters, []);
@@ -56,7 +73,7 @@ useEffect(fetchCharacters, []);
       <CharacterListWrapper>
         {
           characterList.map((character, index) => {
-            return <Character character={character} key={index}></Character>
+            return <Character character={character} homeWorld={character.home} key={index}></Character>
           })
         }
       </CharacterListWrapper>
