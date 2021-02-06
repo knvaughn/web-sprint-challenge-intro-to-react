@@ -11,6 +11,8 @@ const StyledCharacter = styled.div`
     padding: 20px;
     flex: 1;
     text-align: left;
+    transition: all 1s linear;
+    max-height: 400px;
 
     h3 {
         text-align: center;
@@ -24,6 +26,10 @@ const StyledCharacter = styled.div`
     @media(max-width: 1600px) {
         flex: 1 1 30%;
     }
+
+    ${props => props.showHomeWorld && `
+        max-height: 1000px;
+    `}
 `;
 
 const StyledButton = styled.button`
@@ -50,7 +56,7 @@ const Character = (props) => {
     const [showHomeWorld, setShowHomeWorld] = useState(false);
 
     return (
-        <StyledCharacter>
+        <StyledCharacter showHomeWorld={showHomeWorld}>
             <h3>{character.name}</h3>
             <p>Birth Year: {character.birth_year}</p>
             <p>Gender: {character.gender}</p>
